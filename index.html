@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>Paradroit</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <style>
+      #logo {
+        font-family: Borda;
+      }
+      a, a:hover {
+        color: #000;
+        text-decoration: underline;
+      }
+      .text-vertical p {
+        writing-mode: vertical-rl;
+        text-orientation: sideways;
+      }
+      #background {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 40%;
+        height: 100%;
+        border-right: 1px solid #efefef;
+        z-index: 1;
+      }
+      .container {
+        position: relative;
+        z-index: 2;
+      }
+      ul li { margin: 0; padding: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <navigation></navigation>
+      <router-view></router-view>
+    </div>
+    <div id="background"></div>
+    <script src="https://unpkg.com/baffle@0.3.6/dist/baffle.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-router@3.1.6/dist/vue-router.min.js"></script>
+    <script>
+      const Navigation = {
+        template: `
+          <div class="container">
+            <ul class="list-inline mt-3">
+              <li class="list-inline-item"><a href="#/">Home</a></li>
+            </ul>
+          </div>`
+      };
+      const Home = {
+        template: `
+          <div class="container">
+            <div class="row mb-3">
+              <div class="col-4">
+                <h1 id="logo" class="font-weight-bold mt-2 mb-2 text-center">
+                  <div><img src="assets/imgs/logo.png" /></div>
+                </h1>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 text-vertical">
+                <p class="mb-1">Architecture / Engineering / Operations</p>
+              </div>
+              <div class="col-8">
+                <div class="mt-4">
+                  <h2 class="font-weight-normal crypto">
+                    Paradroit is a software consulting company specializing
+                    in systems architecture, software engineering,
+                    and devops.
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>`,
+        data() {
+          return {
+            recentPosts: []
+          };
+        },
+        mounted: function() {
+          baffle('.crypto').start().reveal(3600);
+        }
+      };
+      const Contents = {
+        template: `
+          <div class="container">
+              <div class="row">
+                  <div class="col contents">
+                      <ul class="list-unstyled">
+                          <li><h1>about me <small>001</small></h1></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>`
+      };
+      const Blog = {
+        template: `
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <div v-for="post in posts" class="mb-2">
+                  <h2><a v-bind:href="post.url" target="_blank">{{ post.title }}</a></h2>
+                  <ul class="list-inline">
+                    <li class="list-inline-item">{{ post.date }}</li>
+                    <li class="list-inline-item">{{ post.tags.join() }}</li>
+                  </ul>
+                  <a href="#">Read More</a>
+                </div>
+                <div class="text-center mt-4">
+                  Page 1 of 5 | <a href="#">Next</a>
+                </div>
+              </div>
+            </div>
+          </div>`,
+        data() {
+          return {
+            posts: [
+              { title: 'How to create a navigation bar in Vue.js', date: '2018-12-14', tags: ['Bash', 'Computing'], url: 'https://medium.com/@maeganwilson_/how-to-create-a-navigation-bar-in-vue-js-8a70e7f29f80' },
+              { title: 'Stand-alone usage of Zend-InputFilter', date: '2018-12-14', tags: ['Bash', 'Computing'], url: 'https://akrabat.com/standalone-usage-of-zend-inputfilter/' },
+              { title: 'Implementing CORS in Zend Expressive', date: '2018-12-14', tags: ['Bash', 'Computing'], url: 'https://akrabat.com/implementing-tuupola-cors-in-expressive/' },
+            ]
+          };
+        }
+      };
+      Vue.component('navigation', Navigation);
+      const router = new VueRouter({
+        mode: 'hash',
+        routes: [
+          { path: '/', component: Home },
+          { path: '/contents', component: Contents },
+          { path: '/blog', component: Blog },
+        ]
+      });
+      new Vue({
+        router,
+        el: '#app',
+        data: {}
+      });
+    </script>
+  </body>
+</html>
